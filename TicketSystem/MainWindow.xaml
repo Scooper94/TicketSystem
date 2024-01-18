@@ -1,0 +1,33 @@
+﻿<Window x:Class="TicketSystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TicketSystem"
+        xmlns:navbar="clr-namespace:TicketSystem.NavigationBar"
+        xmlns:ticketList="clr-namespace:TicketSystem.TicketList"
+        mc:Ignorable="d"
+        Title="Ticket System" MinHeight="450" MinWidth="800">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type navbar:NavigationBarViewModel}">
+            <navbar:NavigationBarView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ticketList:TicketListViewModel}">
+            <ticketList:TicketListView />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="300"/>
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <UserControl Grid.ColumnSpan="2" Content="{Binding HeaderViewModel}"></UserControl>
+        <UserControl Grid.Column="0" Grid.Row="1" Content="{Binding LeftPanelViewModel}"></UserControl>
+        <UserControl Grid.Column="1" Grid.Row="1" Content="{Binding MainViewModel}"></UserControl>
+        <UserControl Grid.ColumnSpan="2" Grid.RowSpan="3" Content="{Binding ModalViewModel}"></UserControl>
+    </Grid>
+</Window>
