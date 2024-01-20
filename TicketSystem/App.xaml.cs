@@ -12,6 +12,8 @@ using System.Windows;
 using TicketSystem.NavigationBar;
 using TicketSystem.NavigationCommands;
 using TicketSystem.Settings;
+using TicketSystem.TicketDetail;
+using TicketSystem.TicketList;
 
 namespace TicketSystem
 {
@@ -27,11 +29,23 @@ namespace TicketSystem
             AppHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) => 
                 {
-                    services.AddSingleton<MainWindow>();
+                    services.AddSingleton<MainWindow>(provider => new MainWindow
+                    {
+                        DataContext = provider.GetRequiredService<MainWindowViewModel>()
+                    });
+                    services.AddSingleton<MainWindowViewModel>(provider => CreateMainWindowViewModel());                   
+                    services.AddTransient<SettingsViewModel>(provider => CreateSettingsViewModel());
+                    services.AddTransient<NavigationBarViewModel>(provider => CreateNavigationViewModel());
+
                     services.AddScoped<NavigationStore>();
-                    services.AddTransient<SettingsViewModel>();
-                    services.AddTransient<Func<SettingsViewModel>>(x => () => x.GetRequiredService<SettingsViewModel>());
-                    services.AddTransient<INavigationService<SettingsViewModel>, NavigationService<SettingsViewModel>>();
+                    
+                    services.AddTransient<INavigationService<SettingsViewModel>>(provider => CreateNavigationService<SettingsViewModel>());
+                    services.AddTransient<INavigationService<TicketListViewModel>, NavigationService<TicketListViewModel>>();
+                    services.AddTransient<NavigateCommand<SettingsViewModel>>(provider => CreateNavigateCommand<SettingsViewModel>());
+                    services.AddTransient<NavigateCommand<TicketListViewModel>> (provider => CreateNavigateCommand<TicketListViewModel>());
+
+                    services.AddTransient<Func<SettingsViewModel>>(provider => () => CreateSettingsViewModel());
+                    services.AddTransient<Func<TicketListViewModel>>(provider => () => CreateTicketListViewModel());
                 })
                 .Build();
         }
@@ -40,16 +54,6 @@ namespace TicketSystem
             await AppHost!.StartAsync();
 
             var window = AppHost.Services.GetRequiredService<MainWindow>();
-
-            var s = AppHost.Services.GetRequiredService<INavigationService<SettingsViewModel>>();
-
-            //var window = new MainWindow();
-            /*window.DataContext = new MainWindowViewModel(
-                new NavigationBarViewModel(
-                    new NavigateSettingsCommand(
-                        AppHost.Services.GetRequiredService<INavigationService<SettingsViewModel>>()
-                    )
-                );*/
             window.Show();
 
             base.OnStartup(e);
@@ -57,8 +61,44 @@ namespace TicketSystem
 
         protected override async void OnExit(ExitEventArgs e)
         {
-            await AppHost.StopAsync();
+            await AppHost!.StopAsync();
             base.OnExit(e);
+        }
+
+        private MainWindowViewModel CreateMainWindowViewModel()
+        {
+            return new MainWindowViewModel(
+                AppHost!.Services.GetRequiredService<NavigationBarViewModel>()
+                , AppHost!.Services.GetRequiredService<NavigationStore>()
+                );
+        }
+
+        private SettingsViewModel CreateSettingsViewModel()
+        {
+            return new SettingsViewModel();
+        }
+
+        private TicketListViewModel CreateTicketListViewModel()
+        {
+            return new TicketListViewModel();
+        }
+
+        private NavigateCommand<TViewModel> CreateNavigateCommand<TViewModel>() where TViewModel : ViewModelBase
+        {
+            return new NavigateCommand<TViewModel>(AppHost!.Services.GetRequiredService<INavigationService<TViewModel>>());
+        }
+
+        private NavigationService<TViewModel> CreateNavigationService<TViewModel>() where TViewModel : ViewModelBase
+        {
+            return new NavigationService<TViewModel>(AppHost!.Services.GetRequiredService<NavigationStore>(), AppHost!.Services.GetRequiredService<Func<TViewModel>>());
+        }
+
+        private NavigationBarViewModel CreateNavigationViewModel()
+        {
+            return new NavigationBarViewModel(
+                AppHost!.Services.GetRequiredService<NavigateCommand<SettingsViewModel>>()
+                , AppHost!.Services.GetRequiredService<NavigateCommand<TicketListViewModel>>()
+                , AppHost!.Services.GetRequiredService<NavigateCommand<TicketListViewModel>>());
         }
     }
 }

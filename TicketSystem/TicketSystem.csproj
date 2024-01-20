@@ -16,4 +16,10 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MVVM Boilerplate">
+      <HintPath>..\..\MVVM Boilerplate\MVVM Boilerplate\bin\Debug\net7.0-windows\MVVM Boilerplate.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

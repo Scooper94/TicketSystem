@@ -8,12 +8,13 @@ using System.Windows.Input;
 
 namespace TicketSystem.NavigationBar
 {
-    public class NavigationBarViewModel : ViewModelBase
+    public class NavigationBarViewModel : ViewModelBase, INavigationBarViewModel
     {
-        public NavigationBarViewModel(ICommand navigateSettingsCommand, ICommand navigateOpenTicketsCommad)
+        public NavigationBarViewModel(ICommand navigateSettingsCommand, ICommand navigateOpenTicketsCommand, ICommand navigateClosedTicketsCommand)
         {
             NavigateSettingsCommand = navigateSettingsCommand;
-            NavigateOpenTicketsCommad = navigateOpenTicketsCommad;
+            NavigateOpenTicketsCommand = navigateOpenTicketsCommand;
+            NavigateClosedTicketsCommand = navigateClosedTicketsCommand;
         }
         #region Private Fields
 
@@ -25,7 +26,8 @@ namespace TicketSystem.NavigationBar
 
         #region Properties
         public ICommand NavigateSettingsCommand { get; set; }
-        public ICommand NavigateOpenTicketsCommad { get; set; }
+        public ICommand NavigateOpenTicketsCommand { get; set; }
+        public ICommand NavigateClosedTicketsCommand { get; set; }
         #endregion
     }
 }
