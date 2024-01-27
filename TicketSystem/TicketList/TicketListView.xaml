@@ -7,6 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock>List</TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DataGrid 
+            Grid.Row="1" 
+            Grid.ColumnSpan="3"
+            CanUserAddRows="False"
+            ItemsSource="{Binding TicketList}">
+            
+        </DataGrid>
     </Grid>
 </UserControl>
