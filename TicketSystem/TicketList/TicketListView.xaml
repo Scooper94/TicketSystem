@@ -20,7 +20,8 @@
             Grid.Row="1" 
             Grid.ColumnSpan="3"
             CanUserAddRows="False"
-            ItemsSource="{Binding TicketList}">
+            ItemsSource="{Binding TicketList}"
+            AutoGenerateColumns="True">
             
         </DataGrid>
     </Grid>

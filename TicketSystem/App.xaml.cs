@@ -4,11 +4,13 @@ using MVVM_Boilerplate.Base;
 using MVVM_Boilerplate.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TicketSystem.Models;
 using TicketSystem.NavigationBar;
 using TicketSystem.NavigationCommands;
 using TicketSystem.Settings;
@@ -80,7 +82,8 @@ namespace TicketSystem
 
         private TicketListViewModel CreateTicketListViewModel()
         {
-            return new TicketListViewModel();
+            return new TicketListViewModel(
+                new ObservableCollection<ITicket>() { new Ticket(new List<IUser>(), new List<IMessage>(), 1) });
         }
 
         private NavigateCommand<TViewModel> CreateNavigateCommand<TViewModel>() where TViewModel : ViewModelBase
