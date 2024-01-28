@@ -10,6 +10,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using TicketSystem.Models;
 using TicketSystem.NavigationBar;
 using TicketSystem.NavigationCommands;
@@ -83,7 +84,8 @@ namespace TicketSystem
         private TicketListViewModel CreateTicketListViewModel()
         {
             return new TicketListViewModel(
-                new ObservableCollection<ITicket>() { new Ticket(new List<IUser>(), new List<IMessage>(), 1) });
+                new ObservableCollection<ITicket>() { new Ticket(new List<IUser>(), new List<IMessage>(), 1), new Ticket(new List<IUser>(), new List<IMessage>(), 2) }
+                , AppHost!.Services.GetRequiredService<NavigateCommand<SettingsViewModel>>());
         }
 
         private NavigateCommand<TViewModel> CreateNavigateCommand<TViewModel>() where TViewModel : ViewModelBase

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TicketSystem.Models;
 
 namespace TicketSystem.TicketList
@@ -14,11 +15,14 @@ namespace TicketSystem.TicketList
     {
         #region Properties
         public ObservableCollection<ITicket> TicketList { get; private set; }
+        public ICommand OpenTicketDetailCommand { get; private set; }
+        public ITicket SelectedTicket { get; set; }
         #endregion
 
-        public TicketListViewModel(ObservableCollection<ITicket> ticketList)
+        public TicketListViewModel(ObservableCollection<ITicket> ticketList, ICommand openTicketDetailCommand)
         {
             TicketList = ticketList;
+            OpenTicketDetailCommand = openTicketDetailCommand;
         }
     }
 }

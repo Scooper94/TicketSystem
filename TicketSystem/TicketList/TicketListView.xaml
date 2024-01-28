@@ -21,8 +21,13 @@
             Grid.ColumnSpan="3"
             CanUserAddRows="False"
             ItemsSource="{Binding TicketList}"
+            SelectedItem="{Binding SelectedTicket}"
             AutoGenerateColumns="True">
-            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Open Ticket" Command="{Binding OpenTicketDetailCommand}" CommandParameter="{Binding SelectedTicket}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
     </Grid>
 </UserControl>

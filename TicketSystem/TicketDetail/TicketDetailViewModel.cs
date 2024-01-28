@@ -16,5 +16,9 @@ namespace TicketSystem.TicketDetail
         {
             _ticket = ticket;
         }
+
+        #region Properties
+        public string TicketID => "#" + _ticket.Id.ToString();
+        #endregion
     }
 }
