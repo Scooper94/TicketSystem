@@ -39,16 +39,22 @@ namespace TicketSystem
                     services.AddSingleton<MainWindowViewModel>(provider => CreateMainWindowViewModel());                   
                     services.AddTransient<SettingsViewModel>(provider => CreateSettingsViewModel());
                     services.AddTransient<NavigationBarViewModel>(provider => CreateNavigationViewModel());
+                    
 
                     services.AddScoped<NavigationStore>();
                     
                     services.AddTransient<INavigationService<SettingsViewModel>>(provider => CreateNavigationService<SettingsViewModel>());
                     services.AddTransient<INavigationService<TicketListViewModel>, NavigationService<TicketListViewModel>>();
+                    services.AddTransient(provider => CreateParameterNavigationService<ITicket, TicketDetailViewModel>());
+
                     services.AddTransient<NavigateCommand<SettingsViewModel>>(provider => CreateNavigateCommand<SettingsViewModel>());
                     services.AddTransient<NavigateCommand<TicketListViewModel>> (provider => CreateNavigateCommand<TicketListViewModel>());
+                    services.AddTransient<NavigateCommand<TicketDetailViewModel>>(provider => CreateNavigateCommand<TicketDetailViewModel>());
 
                     services.AddTransient<Func<SettingsViewModel>>(provider => () => CreateSettingsViewModel());
                     services.AddTransient<Func<TicketListViewModel>>(provider => () => CreateTicketListViewModel());
+                    services.AddTransient<Func<ITicket, TicketDetailViewModel>>(provider => CreateTicketDetailViewModel);
+
                 })
                 .Build();
         }
@@ -82,10 +88,22 @@ namespace TicketSystem
         }
 
         private TicketListViewModel CreateTicketListViewModel()
+        {          
+            var nav = new TicketDetailNavigationCommand(AppHost!.Services.GetRequiredService<IParameterNavigationService<ITicket, TicketDetailViewModel>>());
+            var t = new ObservableCollection<ITicket>()
+            {
+                new Ticket(new List<IUser>()
+                , new List<IMessage>(), 1)
+                , new Ticket(new List<IUser>()
+                , new List<IMessage>(), 2)
+            };
+
+            return new TicketListViewModel(t, nav);
+        }
+
+        private TicketDetailViewModel CreateTicketDetailViewModel(ITicket ticket)
         {
-            return new TicketListViewModel(
-                new ObservableCollection<ITicket>() { new Ticket(new List<IUser>(), new List<IMessage>(), 1), new Ticket(new List<IUser>(), new List<IMessage>(), 2) }
-                , AppHost!.Services.GetRequiredService<NavigateCommand<SettingsViewModel>>());
+            return new TicketDetailViewModel(ticket);
         }
 
         private NavigateCommand<TViewModel> CreateNavigateCommand<TViewModel>() where TViewModel : ViewModelBase
@@ -96,6 +114,14 @@ namespace TicketSystem
         private NavigationService<TViewModel> CreateNavigationService<TViewModel>() where TViewModel : ViewModelBase
         {
             return new NavigationService<TViewModel>(AppHost!.Services.GetRequiredService<NavigationStore>(), AppHost!.Services.GetRequiredService<Func<TViewModel>>());
+        }
+
+        private IParameterNavigationService<TParam, TViewModel> CreateParameterNavigationService<TParam, TViewModel>()
+            where TViewModel : ViewModelBase
+        {
+            var store = AppHost!.Services.GetRequiredService<NavigationStore>();
+            var func = AppHost!.Services.GetRequiredService<Func<TParam, TViewModel>>();
+            return new ParameterNavigationService<TParam, TViewModel>(store, func);
         }
 
         private NavigationBarViewModel CreateNavigationViewModel()
