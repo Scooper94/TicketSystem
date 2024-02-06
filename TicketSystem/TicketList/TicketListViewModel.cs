@@ -13,10 +13,14 @@ namespace TicketSystem.TicketList
 {
     public class TicketListViewModel : ViewModelBase
     {
+        #region Private Fields
+
+        #endregion
         #region Properties
         public ObservableCollection<ITicket> TicketList { get; private set; }
         public ICommand OpenTicketDetailCommand { get; private set; }
         public ITicket SelectedTicket { get; set; }
+
         #endregion
 
         public TicketListViewModel(ObservableCollection<ITicket> ticketList, ICommand openTicketDetailCommand)

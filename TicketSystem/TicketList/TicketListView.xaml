@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TicketSystem.TicketList"
+             xmlns:local="clr-namespace:TicketSystem.TicketList" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -19,10 +19,12 @@
         <DataGrid 
             Grid.Row="1" 
             Grid.ColumnSpan="3"
-            CanUserAddRows="False"
             ItemsSource="{Binding TicketList}"
-            SelectedItem="{Binding SelectedTicket}"
-            AutoGenerateColumns="True">
+            SelectedItem="{Binding SelectedTicket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            AutoGenerateColumns="True"
+            IsReadOnly="True"
+            MouseDoubleClick="DataGrid_MouseDoubleClick">
+            
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Open Ticket" Command="{Binding OpenTicketDetailCommand}" CommandParameter="{Binding SelectedTicket}"/>

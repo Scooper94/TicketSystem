@@ -24,5 +24,12 @@ namespace TicketSystem.TicketList
         {
             InitializeComponent();
         }
+
+        //TODO: Improve
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var dc = DataContext as TicketListViewModel;
+            dc.OpenTicketDetailCommand.Execute(dc.SelectedTicket);
+        }
     }
 }

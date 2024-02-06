@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TicketSystem.DataAccess;
 using TicketSystem.Models;
 using TicketSystem.NavigationBar;
 using TicketSystem.NavigationCommands;
@@ -39,7 +40,8 @@ namespace TicketSystem
                     services.AddSingleton<MainWindowViewModel>(provider => CreateMainWindowViewModel());                   
                     services.AddTransient<SettingsViewModel>(provider => CreateSettingsViewModel());
                     services.AddTransient<NavigationBarViewModel>(provider => CreateNavigationViewModel());
-                    
+                    services.AddTransient<ITicketRepository, TicketRepository>();
+
 
                     services.AddScoped<NavigationStore>();
                     
@@ -90,15 +92,10 @@ namespace TicketSystem
         private TicketListViewModel CreateTicketListViewModel()
         {          
             var nav = new TicketDetailNavigationCommand(AppHost!.Services.GetRequiredService<IParameterNavigationService<ITicket, TicketDetailViewModel>>());
-            var t = new ObservableCollection<ITicket>()
-            {
-                new Ticket(new List<IUser>()
-                , new List<IMessage>(), 1)
-                , new Ticket(new List<IUser>()
-                , new List<IMessage>(), 2)
-            };
-
-            return new TicketListViewModel(t, nav);
+            var repo = AppHost!.Services.GetRequiredService<ITicketRepository>();
+            ObservableCollection<ITicket> tickets = new ObservableCollection<ITicket>(repo.GetAll());
+            
+            return new TicketListViewModel(tickets, nav);
         }
 
         private TicketDetailViewModel CreateTicketDetailViewModel(ITicket ticket)

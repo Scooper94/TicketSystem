@@ -19,6 +19,20 @@ namespace TicketSystem.TicketDetail
 
         #region Properties
         public string TicketID => "#" + _ticket.Id.ToString();
+        public string Title => _ticket.Title;
+        public string Description => _ticket.IssueDescription;
+        public DateTime DueDate
+        {
+            get
+            {
+                return _ticket.DueDate;
+            }
+            set
+            {
+                _ticket.DueDate = value;
+                OnPropertyChanged(nameof(DueDate));
+            }
+        }
         #endregion
     }
 }
