@@ -100,7 +100,8 @@ namespace TicketSystem
 
         private TicketDetailViewModel CreateTicketDetailViewModel(ITicket ticket)
         {
-            return new TicketDetailViewModel(ticket);
+            ObservableCollection<IUser> agents = new ObservableCollection<IUser>() { new User() { Name = "scooper" }, new User() { Name = "an user" } };
+            return new TicketDetailViewModel(ticket, agents);
         }
 
         private NavigateCommand<TViewModel> CreateNavigateCommand<TViewModel>() where TViewModel : ViewModelBase

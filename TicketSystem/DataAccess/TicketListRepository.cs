@@ -22,12 +22,14 @@ namespace TicketSystem.DataAccess
                 new Ticket(new List<IUser>(), new List<IMessage>(), 1)
                 {
                     Title = "Test Ticket 1",
-                    IssueDescription = "Here is a short description of issue one"
+                    IssueDescription = "Here is a short description of issue one",
+                    Owner = new User() { Name = "scooper" }
                 }
                 , new Ticket(new List<IUser>(), new List<IMessage>(), 2)
                 {
                     Title = "Test Ticket 2",
-                    IssueDescription = "Here is a short description of issue two"
+                    IssueDescription = "Here is a short description of issue two",
+                    Owner = new User() { Name = "scooper" }
                 }
             };
 
